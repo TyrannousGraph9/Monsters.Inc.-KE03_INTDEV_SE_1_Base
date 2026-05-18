@@ -1,0 +1,42 @@
+@page
+@model AssortimentModel
+@{
+    ViewData["Title"] = "Assortiment";
+}
+
+<form class="d-flex justify-content-center mb-4" method="get">
+    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#filterOptions">
+        <i class="fa-solid fa-sliders"></i>
+    </button>
+    <div class="input-group" style="max-width: 420px; width: 100%;">
+        <input type="text" name="searchString" class="form-control" placeholder="Zoeken..." />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+<div class="row g-3">
+    @foreach (var p in Model.Products)
+    {
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100">
+                  @{
+                    string imgSrc = "";
+                    if (p.Image is byte[] imgBytes)
+                        {
+                            imgSrc = $"data:image/png;base64,{Convert.ToBase64String(imgBytes)}";
+                        }
+                    }
+                <img src="@imgSrc" class="card-img-top" alt="Foto van @p.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@p.Name</h5>
+                    <p class="card-text">@p.Description</p>
+                    <a href="#" class="btn btn-primary">Voeg toe</a>
+                </div>
+            </div>
+        </div>
+    }
+</div> 

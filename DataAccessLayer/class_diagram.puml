@@ -1,0 +1,98 @@
+@startuml
+title DataAccessLayer — Class diagram
+
+package "DataAccessLayer.Models" {
+  class Product {
+    +int Id
+    +string Name
+    +string Description
+    +decimal Price
+    +int CategoryId
+    +Category Category
+    +ICollection<Order> Orders
+    +ICollection<Part> Parts
+  }
+
+  class Part {
+    +int Id
+    +string Name
+    +string Description
+    +ICollection<Product> Products
+  }
+
+  class Order {
+    +int Id
+    +DateTime OrderDate
+    +int CustomerId
+    +Customer Customer
+    +ICollection<Product> Products
+  }
+
+  class Customer {
+    +int Id
+    +string Name
+    +string Address
+    +bool Active
+    +ICollection<Order> Orders
+  }
+
+  class Category {
+    +int CategoryId
+    +string CategoryName
+    +ICollection<Product> Products
+  }
+}
+
+package "DataAccessLayer.Interfaces" {
+  interface IProductRepository
+  interface IPartRepository
+  interface IOrderRepository
+  interface ICustomerRepository
+  interface ICategoryRepository
+}
+
+package "DataAccessLayer.Repositories" {
+  class ProductRepository
+  class PartRepository
+  class OrderRepository
+  class CustomerRepository
+  class CategoryRepository
+}
+
+class MatrixIncDbContext {
+  +DbSet<Customer> Customers
+  +DbSet<Order> Orders
+  +DbSet<Product> Products
+  +DbSet<Part> Parts
+  +DbSet<Category> Categories
+}
+
+class MatrixIncDbInitializer {
+  +static void Initialize(MatrixIncDbContext context)
+}
+
+'Relationships'
+Customer "1" -- "0..*" Order : orders
+Order "*" -- "*" Product : products
+Product "*" -- "*" Part : parts
+Category "1" -- "0..*" Product : products
+
+ProductRepository ..|> IProductRepository
+PartRepository ..|> IPartRepository
+OrderRepository ..|> IOrderRepository
+CustomerRepository ..|> ICustomerRepository
+CategoryRepository ..|> ICategoryRepository
+
+ProductRepository --> MatrixIncDbContext : uses
+PartRepository --> MatrixIncDbContext : uses
+OrderRepository --> MatrixIncDbContext : uses
+CustomerRepository --> MatrixIncDbContext : uses
+CategoryRepository --> MatrixIncDbContext : uses
+
+MatrixIncDbContext --> Product : manages
+MatrixIncDbContext --> Part : manages
+MatrixIncDbContext --> Order : manages
+MatrixIncDbContext --> Customer : manages
+MatrixIncDbContext --> Category : manages
+
+@enduml

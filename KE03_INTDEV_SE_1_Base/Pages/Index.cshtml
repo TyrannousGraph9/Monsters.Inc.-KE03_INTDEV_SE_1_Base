@@ -3,28 +3,51 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<div class="alert-info">
-    <p class="p-1">
-        Dit project kun je gebruiken als startpunt voor de individuele inleveropdracht: <a href="https://moodle.zuyd.nl/mod/resource/view.php?id=1262065">KE03_INTDEV_SE_1</a>
 
-        <ul>
-            <li>Wat ga je maken: Een gebruiksvriendelijk online bestelsysteem voor een klant om producten te bestellen.</li>
-            <li>
-                Hoe ga je dit maken?<br />
-                - Individuele inleveropdracht.<br/>
-                - Pas de principes van HCI toe (bijv. Paper prototyping, design principles etc…)<br />
-                - Maak gebruik van: .NET core razor pages met bijbehorende zaken zoals, html, css, js, bootstrap, jquery<br />
-                - Maak gebruik van git en github voor source control van jouw code<br />
-            </li>
-            <li>
-                Je krijgt een dal (data access layer) meegeleverd. Qua inhoud is die niet perfect gevuld, maar qua structuur biedt die voldoende om een mooi bestel systeem te kunnen maken. <br /> 
-                Maar mis je iets, je bent vrij om alles naar wens aan te passen! Ben creatief!
-            </li>
-        </ul>
-    </p>
+<form class="d-flex justify-content-center mb-4" method="get">
+    <div class="input-group" style="max-width: 420px; width: 100%;">
+        <input type="text" name="searchString" class="form-control" placeholder="Zoeken..." />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+
+<div class="d-flex gap-4 mb-4">
+    <div class="p-2 bg-light border" style="width: 300px;">
+        <h2>Relevant voor jou</h2>
+        <hr class="border-primary border-10 opacity-100" />
+        <img class="img-fluid" src="https://smartblogger.com/wp-content/uploads/2222/12/banner-ads-mint-mobile.jpg" alt="Relevant voor jou" />
+    </div>
+    <div class="p-2 bg-light border" style="width: 1000px;">
+        <h2>Veel gezochte categorien</h2>
+        <hr class="border-primary border-10 opacity-100" />
+        <table class="table">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model.Categories)
+            {
+                <tr>
+                    <p class="h1"><a class="text-decoration-none" style="color: black;" href="">- @Html.DisplayName(p.CategoryName)</a></p>
+                    <br />
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<table class="table">
+
+
+
+@* Niet nodig hier.*@
+@* <table class="table">
     <thead>
         <tr>
             <th>Klant</th>
@@ -38,4 +61,4 @@
             <td>@Html.DisplayName(c.Orders.Count.ToString())</td>           
         </tr>
     }
-</table>
+</table> *@

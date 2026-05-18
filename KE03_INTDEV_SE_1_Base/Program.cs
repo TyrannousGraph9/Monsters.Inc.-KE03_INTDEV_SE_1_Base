@@ -21,6 +21,7 @@ namespace KE03_INTDEV_SE_1_Base
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
@@ -40,6 +41,7 @@ namespace KE03_INTDEV_SE_1_Base
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<MatrixIncDbContext>();
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 MatrixIncDbInitializer.Initialize(context);
             }

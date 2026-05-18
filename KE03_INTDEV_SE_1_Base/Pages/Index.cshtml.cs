@@ -8,21 +8,22 @@ namespace KE03_INTDEV_SE_1_Base.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly ICustomerRepository _customerRepository;
 
-        public IList<Customer> Customers { get; set; }
+        private readonly ICategoryRepository _categoryRepository;
 
-        public IndexModel(ILogger<IndexModel> logger, ICustomerRepository customerRepository)
+        public IList<Category> Categories { get; set; }
+
+        public IndexModel(ILogger<IndexModel> logger, ICategoryRepository categoryRepository)
         {
             _logger = logger;
-            _customerRepository = customerRepository;
-            Customers = new List<Customer>();
+            _categoryRepository = categoryRepository;
+            Categories = new List<Category>();
         }
 
         public void OnGet()
         {            
-            Customers = _customerRepository.GetAllCustomers().ToList();                            
-            _logger.LogInformation($"getting all {Customers.Count} customers");
+            Categories = _categoryRepository.GetAllCategories().ToList();
+            _logger.LogInformation($"getting all {Categories.Count} categories from the database");
         }
     }
 }

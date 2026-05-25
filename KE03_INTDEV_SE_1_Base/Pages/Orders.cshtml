@@ -1,0 +1,47 @@
+@page
+@model OrdersModel
+@using System.Globalization
+@{
+	ViewData["Title"] = "Order historie";
+	var euroCulture = CultureInfo.GetCultureInfo("nl-NL");
+}
+
+<div class="row justify-content-center">
+	<div class="col-12 col-xxl-11">
+		<div class="bg-white border shadow-sm p-4 p-lg-5">
+			<h1 class="h3 fw-bold mb-4">Order historie</h1>
+
+			<div class="table-responsive">
+				<table class="table align-middle">
+					<thead class="table-light">
+						<tr>
+							<th>Order</th>
+							<th>Naam</th>
+							<th>Adres</th>
+							<th>Product</th>
+							<th>Artikelen</th>
+							<th>Datum</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var order in Model.Orders)
+						{
+							<tr>
+								<td class="fw-semibold" style="width: 22%;">order @order.OrderNumber</td>
+								<td>@order.CustomerName</td>
+								<td>@order.CustomerAddress</td>
+								<td>@order.ProductSummary</td>
+								<td>artikelen: @order.TotalItems</td>
+								<td>@order.OrderDate.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)</td>
+								<td class="text-end">
+									<a class="btn btn-outline-dark" asp-page="/Orders/Details" asp-route-id="@order.Id">bekijk order</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

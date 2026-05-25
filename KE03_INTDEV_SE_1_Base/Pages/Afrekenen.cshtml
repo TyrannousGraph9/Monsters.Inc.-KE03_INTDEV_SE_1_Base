@@ -1,0 +1,126 @@
+@page
+@model AfrekenenModel
+@using System.Globalization
+@{
+	ViewData["Title"] = "Afrekenen";
+	var euroCulture = CultureInfo.GetCultureInfo("nl-NL");
+}
+
+<div class="row justify-content-center">
+	<div class="col-12 col-xxl-11">
+		<div class="bg-white border shadow-sm p-4 p-lg-5">
+			<div class="text-center mb-4">
+				<div class="d-inline-block border px-4 py-1 mb-3 bg-white">
+					<h1 class="h4 mb-0">Bestelgegevens</h1>
+				</div>
+				<p class="text-muted mb-0">Vul je gegevens in en plaats je bestelling.</p>
+			</div>
+
+			@if (!Model.CartItems.Any())
+			{
+				<div class="alert alert-info mb-4">
+					Je winkelmandje is leeg. Voeg eerst producten toe voordat je afrekent.
+				</div>
+			}
+
+			<form method="post" asp-page-handler="PlaceOrder">
+				<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+				<div class="row g-4">
+					<div class="col-12 col-lg-7">
+						<div class="border p-3 p-lg-4 h-100">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label asp-for="Input.FirstName" class="form-label">Voornaam</label>
+									<input asp-for="Input.FirstName" class="form-control" />
+									<span asp-validation-for="Input.FirstName" class="text-danger"></span>
+								</div>
+								<div class="col-md-6">
+									<label asp-for="Input.LastName" class="form-label">Achternaam</label>
+									<input asp-for="Input.LastName" class="form-control" />
+									<span asp-validation-for="Input.LastName" class="text-danger"></span>
+								</div>
+								<div class="col-12">
+									<label asp-for="Input.Email" class="form-label">Email-adres</label>
+									<input asp-for="Input.Email" class="form-control" />
+									<span asp-validation-for="Input.Email" class="text-danger"></span>
+								</div>
+								<div class="col-12">
+									<label asp-for="Input.Street" class="form-label">Straat + huisnummer</label>
+									<input asp-for="Input.Street" class="form-control" />
+									<span asp-validation-for="Input.Street" class="text-danger"></span>
+								</div>
+								<div class="col-md-4">
+									<label asp-for="Input.Postcode" class="form-label">Postcode</label>
+									<input asp-for="Input.Postcode" class="form-control" />
+									<span asp-validation-for="Input.Postcode" class="text-danger"></span>
+								</div>
+								<div class="col-md-8">
+									<label asp-for="Input.City" class="form-label">Plaats</label>
+									<input asp-for="Input.City" class="form-control" />
+									<span asp-validation-for="Input.City" class="text-danger"></span>
+								</div>
+							</div>
+
+							<div class="mt-4">
+								<div class="d-inline-block border px-3 py-1 mb-3">
+									<strong>Betaalmethode</strong>
+								</div>
+								<div class="d-grid gap-3">
+									<label class="border p-3 d-flex align-items-center gap-3">
+										<input asp-for="Input.PaymentMethod" type="radio" value="Ideal" class="form-check-input m-0" />
+										<span class="form-control flex-grow-1">iDeal</span>
+									</label>
+									<label class="border p-3 d-flex align-items-center gap-3">
+										<input asp-for="Input.PaymentMethod" type="radio" value="Klarna" class="form-check-input m-0" />
+										<span class="form-control flex-grow-1">Klarna</span>
+									</label>
+								</div>
+								<span asp-validation-for="Input.PaymentMethod" class="text-danger d-block mt-2"></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-12 col-lg-5">
+						<div class="border p-3 p-lg-4 h-100 bg-light">
+							<h2 class="h5 mb-3 text-center">Bestelling plaatsen</h2>
+
+							<div class="border bg-white p-3 mb-3">
+								<div class="d-flex justify-content-between mb-2">
+									<span>Subtotaal</span>
+									<strong>@Model.Subtotal.ToString("C", euroCulture)</strong>
+								</div>
+								<div class="d-flex justify-content-between mb-2">
+									<span>Verzending</span>
+									<strong>@Model.Shipping.ToString("C", euroCulture)</strong>
+								</div>
+								<hr />
+								<div class="d-flex justify-content-between fs-5">
+									<span>Totaal prijs</span>
+									<strong>@Model.Total.ToString("C", euroCulture)</strong>
+								</div>
+							</div>
+
+							<div class="border bg-white p-3 mb-3">
+								<h3 class="h6 text-uppercase text-muted mb-3">Winkelmandje</h3>
+								@foreach (var item in Model.CartItems)
+								{
+									<div class="d-flex justify-content-between gap-3 mb-2">
+										<div>
+											<div class="fw-semibold">@item.Name</div>
+											<small class="text-muted">Aantal: @item.Quantity</small>
+										</div>
+										<div class="text-end fw-semibold">@item.LineTotal.ToString("C", euroCulture)</div>
+									</div>
+								}
+							</div>
+
+							<button type="submit" class="btn btn-dark w-100 btn-lg" @(Model.CartItems.Any() ? null : "disabled")>
+								Bestelling plaatsen
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,121 @@
+@page
+@model ShoppingcartModel
+@using System.Globalization
+@{
+	ViewData["Title"] = "Winkelmandje";
+	var euroCulture = CultureInfo.GetCultureInfo("nl-NL");
+}
+
+<div class="row justify-content-center">
+	<div class="col-12 col-xl-10">
+		<div class="bg-white border shadow-sm p-4 mb-4">
+			@if (TempData["SuccessMessage"] is string successMessage)
+			{
+				<div class="alert alert-success">@successMessage</div>
+			}
+
+			@if (!Model.CartItems.Any())
+			{
+				<div class="alert alert-info">Je winkelmandje is leeg.</div>
+			}
+
+			<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+				<div>
+					<h1 class="h3 mb-1">Winkelmandje</h1>
+					<p class="text-muted mb-0">Bekijk je geselecteerde producten en reken af wanneer je klaar bent.</p>
+				</div>
+				<a class="btn btn-outline-dark" asp-page="/Assortiment">
+					Verder winkelen
+				</a>
+			</div>
+
+			<div class="table-responsive">
+				<table class="table align-middle">
+					<thead class="table-light">
+						<tr>
+							<th scope="col">Afbeelding</th>
+							<th scope="col">Product</th>
+							<th scope="col" class="text-center">Hoeveelheid</th>
+							<th scope="col" class="text-end">Prijs</th>
+							<th scope="col" class="text-end">Totaal</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model.CartItems)
+						{
+							<tr>
+								<td style="width: 96px;">
+									@if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+									{
+										<img src="@item.ImageUrl" alt="@item.Name" class="img-fluid rounded border" />
+									}
+									else
+									{
+										<div class="border rounded bg-light d-flex align-items-center justify-content-center" style="width: 72px; height: 72px;">
+											<i class="fa-solid fa-box-open fa-lg text-secondary"></i>
+										</div>
+									}
+								</td>
+								<td>
+									<div class="fw-semibold">@item.Name</div>
+									<small class="text-muted">@item.Description</small>
+								</td>
+								<td class="text-center">
+									<div class="d-inline-flex align-items-center gap-2">
+										<form method="post" asp-page-handler="Decrease" class="d-inline">
+											<input type="hidden" name="productId" value="@item.ProductId" />
+											<button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Minder van @item.Name">
+												-
+											</button>
+										</form>
+										<span class="fw-semibold px-2">@item.Quantity</span>
+										<form method="post" asp-page-handler="Increase" class="d-inline">
+											<input type="hidden" name="productId" value="@item.ProductId" />
+											<button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Meer van @item.Name">
+												+
+											</button>
+										</form>
+									</div>
+								</td>
+								<td class="text-end">@item.UnitPrice.ToString("C", euroCulture)</td>
+								<td class="text-end">@item.LineTotal.ToString("C", euroCulture)</td>
+								<td class="text-end">
+									<form method="post" asp-page-handler="Remove">
+										<input type="hidden" name="productId" value="@item.ProductId" />
+										<button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Verwijder @item.Name">
+											<i class="fa-solid fa-trash-can"></i>
+										</button>
+									</form>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="row justify-content-end mt-4">
+				<div class="col-12 col-md-5 col-lg-4">
+					<div class="border bg-light p-3">
+						<div class="d-flex justify-content-between mb-2">
+							<span>Subtotaal</span>
+							<strong>@Model.Subtotal.ToString("C", euroCulture)</strong>
+						</div>
+						<div class="d-flex justify-content-between mb-2">
+							<span>Verzending</span>
+							<strong>@Model.Shipping.ToString("C", euroCulture)</strong>
+						</div>
+						<hr />
+						<div class="d-flex justify-content-between fs-5 mb-3">
+							<span>Totaal prijs</span>
+							<strong>@Model.Total.ToString("C", euroCulture)</strong>
+						</div>
+						<a class="btn btn-dark w-100 @(Model.CartItems.Any() ? string.Empty : "disabled")" asp-page="/Afrekenen" aria-disabled="@(Model.CartItems.Any() ? "false" : "true")">
+							Afrekenen
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

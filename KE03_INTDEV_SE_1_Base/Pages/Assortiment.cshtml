@@ -34,7 +34,10 @@
                 <div class="card-body">
                     <h5 class="card-title">@p.Name</h5>
                     <p class="card-text">@p.Description</p>
-                    <a href="#" class="btn btn-primary">Voeg toe</a>
+                    <form method="post" asp-page-handler="AddToCart">
+                        <input type="hidden" name="productId" value="@p.Id" />
+                        <button type="submit" class="btn btn-primary">Voeg toe</button>
+                    </form>
                 </div>
             </div>
         </div>

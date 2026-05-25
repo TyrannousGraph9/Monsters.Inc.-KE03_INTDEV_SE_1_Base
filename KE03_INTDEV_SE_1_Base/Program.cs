@@ -24,6 +24,14 @@ namespace KE03_INTDEV_SE_1_Base
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // Add services to the container.
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = ".KE03_INTDEV_SE_1_Base.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
@@ -41,7 +49,6 @@ namespace KE03_INTDEV_SE_1_Base
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<MatrixIncDbContext>();
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 MatrixIncDbInitializer.Initialize(context);
             }
@@ -50,6 +57,8 @@ namespace KE03_INTDEV_SE_1_Base
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 

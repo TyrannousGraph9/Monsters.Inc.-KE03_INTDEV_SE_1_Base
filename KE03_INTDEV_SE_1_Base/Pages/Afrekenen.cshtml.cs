@@ -67,7 +67,8 @@ namespace KE03_INTDEV_SE_1_Base.Pages
             var order = new Order
             {
                 CustomerId = customer.Id,
-                OrderDate = DateTime.Now
+                OrderDate = DateTime.Now,
+                Status = OrderStatus.Besteld
             };
 
             foreach (var cartItem in CartItems)

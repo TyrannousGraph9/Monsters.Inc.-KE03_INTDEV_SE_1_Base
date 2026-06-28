@@ -1,9 +1,11 @@
 @page "{id:int}"
 @model OrderDetailsModel
+@using DataAccessLayer.Models
 @using System.Globalization
 @{
 	ViewData["Title"] = "Order details";
 	var euroCulture = CultureInfo.GetCultureInfo("nl-NL");
+	var currentStepIndex = (int)Model.Status;
 }
 
 <div class="row justify-content-center">
@@ -12,9 +14,28 @@
 			<div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
 				<div>
 					<h1 class="h3 fw-bold mb-1">Order @Model.OrderId</h1>
-					<p class="text-muted mb-0">@Model.OrderDate.ToString("dd-MM-yyyy HH:mm")</p>
+					<p class="text-muted mb-2">@Model.OrderDate.ToString("dd-MM-yyyy HH:mm")</p>
+					<span class="badge @OrderDetailsModel.GetStatusBadgeClass(Model.Status)">@OrderDetailsModel.GetStatusLabel(Model.Status)</span>
 				</div>
 				<a class="btn btn-outline-dark" asp-page="/Orders">Terug naar overzicht</a>
+			</div>
+
+			<div class="border bg-light p-4 mb-4">
+				<h2 class="h6 fw-bold text-uppercase text-muted mb-3">Orderstatus</h2>
+				<div class="d-flex flex-wrap justify-content-between gap-3">
+					@for (var i = 0; i < OrderDetailsModel.StatusSteps.Count; i++)
+					{
+						var step = OrderDetailsModel.StatusSteps[i];
+						var isCompleted = i <= currentStepIndex;
+						var isCurrent = i == currentStepIndex;
+						<div class="text-center flex-fill" style="min-width: 120px;">
+							<div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center fw-bold @(isCompleted ? "bg-primary text-white" : "bg-white border text-muted")" style="width: 42px; height: 42px;">
+								@(i + 1)
+							</div>
+							<div class="small @(isCurrent ? "fw-bold text-primary" : isCompleted ? "fw-semibold" : "text-muted")">@step.Label</div>
+						</div>
+					}
+				</div>
 			</div>
 
 			<div class="border bg-light p-3 mb-4">

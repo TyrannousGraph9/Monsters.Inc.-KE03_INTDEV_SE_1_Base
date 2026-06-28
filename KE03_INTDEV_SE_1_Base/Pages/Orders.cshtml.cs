@@ -27,11 +27,12 @@ namespace KE03_INTDEV_SE_1_Base.Pages
                     order.Customer.Address,
                     order.OrderItems.Sum(item => item.Quantity),
                     order.OrderItems.Select(item => item.Product.Name).ToList(),
-                    order.OrderDate))
+                    order.OrderDate,
+                    order.Status))
                 .ToList();
         }
 
-        public sealed record OrderSummary(int Id, string CustomerName, string CustomerAddress, int TotalItems, IList<string> Products, DateTime OrderDate)
+        public sealed record OrderSummary(int Id, string CustomerName, string CustomerAddress, int TotalItems, IList<string> Products, DateTime OrderDate, OrderStatus Status)
         {
             public int OrderNumber => Id;
 

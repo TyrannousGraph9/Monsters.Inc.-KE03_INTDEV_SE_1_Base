@@ -22,7 +22,7 @@
     @foreach (var p in Model.Products)
     {
         <div class="col-md-6 col-lg-3">
-            <div class="card h-100">
+            <div class="card h-100" style="cursor: pointer;" onclick="window.location.href='@Url.Page("/Products/Details", new { id = p.Id })'">
                   @{
                     string imgSrc = "";
                     if (p.Image is byte[] imgBytes)
@@ -31,12 +31,12 @@
                         }
                     }
                 <img src="@imgSrc" class="card-img-top" alt="Foto van @p.Name">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@p.Name</h5>
-                    <p class="card-text">@p.Description</p>
-                    <form method="post" asp-page-handler="AddToCart">
+                    <p class="card-text flex-grow-1">@p.Description</p>
+                    <form method="post" asp-page-handler="AddToCart" class="mt-auto" onclick="event.stopPropagation();">
                         <input type="hidden" name="productId" value="@p.Id" />
-                        <button type="submit" class="btn btn-primary">Voeg toe</button>
+                        <button type="submit" class="btn btn-primary w-100">Voeg toe</button>
                     </form>
                 </div>
             </div>

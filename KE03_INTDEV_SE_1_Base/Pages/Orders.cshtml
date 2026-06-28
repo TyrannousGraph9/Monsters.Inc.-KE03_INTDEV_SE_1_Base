@@ -1,5 +1,6 @@
 @page
 @model OrdersModel
+@using DataAccessLayer.Models
 @using System.Globalization
 @{
 	ViewData["Title"] = "Order historie";
@@ -21,6 +22,7 @@
 							<th>Product</th>
 							<th>Artikelen</th>
 							<th>Datum</th>
+							<th>Status</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -34,6 +36,9 @@
 								<td>@order.ProductSummary</td>
 								<td>artikelen: @order.TotalItems</td>
 								<td>@order.OrderDate.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)</td>
+								<td>
+									<span class="badge @OrderDetailsModel.GetStatusBadgeClass(order.Status)">@OrderDetailsModel.GetStatusLabel(order.Status)</span>
+								</td>
 								<td class="text-end">
 									<a class="btn btn-outline-dark" asp-page="/Orders/Details" asp-route-id="@order.Id">bekijk order</a>
 								</td>

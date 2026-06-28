@@ -50,6 +50,7 @@ namespace KE03_INTDEV_SE_1_Base
 
                 var context = services.GetRequiredService<MatrixIncDbContext>();
                 context.Database.EnsureCreated();
+                MatrixIncDbMigrator.Apply(context);
                 MatrixIncDbInitializer.Initialize(context);
             }
 

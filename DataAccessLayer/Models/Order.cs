@@ -13,6 +13,8 @@ namespace DataAccessLayer.Models
 
         public DateTime OrderDate { get; set; }
 
+        public OrderStatus Status { get; set; } = OrderStatus.Besteld;
+
         public int CustomerId { get; set; }
         
         public Customer Customer { get; set; } = null!;

@@ -1,0 +1,64 @@
+@page "{id:int}"
+@model ProductDetailsModel
+@using System.Globalization
+@{
+    ViewData["Title"] = Model.Product.Name;
+    var euroCulture = CultureInfo.GetCultureInfo("nl-NL");
+    var product = Model.Product;
+    string imgSrc = "";
+    if (product.Image is byte[] imgBytes)
+    {
+        imgSrc = $"data:image/png;base64,{Convert.ToBase64String(imgBytes)}";
+    }
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+        <div class="bg-white border shadow-sm p-4 p-lg-5">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+                <div>
+                    <h1 class="h3 fw-bold mb-1">@product.Name</h1>
+                    @if (product.Category is not null)
+                    {
+                        <p class="text-muted mb-0">@product.Category.CategoryName</p>
+                    }
+                </div>
+                <a class="btn btn-outline-dark" asp-page="/Index">Terug naar homepage</a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <img src="@imgSrc" class="img-fluid border" alt="Foto van @product.Name" />
+                </div>
+                <div class="col-md-7">
+                    <p class="lead">@product.Description</p>
+                    <p class="h4 fw-bold mb-4">@product.Price.ToString("C", euroCulture)</p>
+
+                    <form method="post" asp-page-handler="AddToCart">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <button type="submit" class="btn btn-primary">Voeg toe aan winkelmand</button>
+                    </form>
+                </div>
+            </div>
+
+            @if (product.Parts.Any())
+            {
+                <div class="mt-5">
+                    <h2 class="h5 fw-bold mb-3">Onderdelen</h2>
+                    <ul class="list-group">
+                        @foreach (var part in product.Parts)
+                        {
+                            <li class="list-group-item">
+                                <strong>@part.Name</strong>
+                                @if (!string.IsNullOrWhiteSpace(part.Description))
+                                {
+                                    <span class="text-muted"> — @part.Description</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
